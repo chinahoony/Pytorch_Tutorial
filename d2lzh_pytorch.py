@@ -84,7 +84,6 @@ def train_ch3(net, train_iter, test_iter, loss, num_epochs, batch_size, params =
             y_hat = net(X)
             l = loss(y_hat, y).sum()
             if optimize is not None:
-                optimize.grad_zero()
                 optimize.zero_grad()
             elif params is not None and params[0].grad is not None:
                 for param in params:
