@@ -9,6 +9,8 @@ from IPython import display
 import matplotlib.pyplot as plt
 import random
 import torch
+import torchvision
+import sys
 
 def use_svg_display():
     display.set_matplotlib_formats('svg')
@@ -48,6 +50,23 @@ def show_fashion_mnist(images, labels):
         f.axes.get_yaxis().set_visible(False)
     plt.show()
 
+def load_data_fashion_mnist(batch_size):
+    root_dir = './Datasets/FashionMNIST'
+    train_dataset = torchvision.datasets.FashionMNIST(root=root_dir, train=True, transform=torchvision.transforms.ToTensor(),download=True)
+    test_dataset = torchvision.datasets.FashionMNIST(root=root_dir, train=False, transform=torchvision.transforms.ToTensor(),download=True)
+    
+    if sys.platform.startswith('win') or sys.platform.startswith('darwin'):
+        num_workers = 0
+    else:
+        num_workers = 4
+    
+    train_iter = torch.utils.data.DataLoader(train_dataset,batch_size=batch_size, shuffle=True, num_workers=num_workers)
+    test_iter = torch.utils.data.DataLoader(test_dataset,batch_size=batch_size, shuffle=True, num_workers=num_workers)
+    
+    return train_iter, test_iter
+
+
+
 def evaluate_accuracy(data_iter, net):
     acc_sum, n = 0.0, 0
     for X, y in data_iter:
@@ -66,6 +85,7 @@ def train_ch3(net, train_iter, test_iter, loss, num_epochs, batch_size, params =
             l = loss(y_hat, y).sum()
             if optimize is not None:
                 optimize.grad_zero()
+                optimize.zero_grad()
             elif params is not None and params[0].grad is not None:
                 for param in params:
                     param.grad.data.zero_()
