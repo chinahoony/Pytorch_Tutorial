@@ -9,6 +9,7 @@ from IPython import display
 import matplotlib.pyplot as plt
 import random
 import torch
+from torch import nn
 import torchvision
 import sys
 
@@ -101,7 +102,11 @@ def train_ch3(net, train_iter, test_iter, loss, num_epochs, batch_size, params =
             n = y.shape[0]
         test_acc = evaluate_accuracy(test_iter, net)
         print(f'epoch {epoch+1}, loss {train_l_sum/n:.4f}, acc {train_acc_sum/n:.3f}, test acc {test_acc:.3f}')
+
+
+class FlattenLayer(nn.Module):
+    def __init__(self):
+        super(FlattenLayer,self).__init__()
+    def forward(self, x):
+        return x.view(x.shape[0],-1)
     
-    
-    
-    return
