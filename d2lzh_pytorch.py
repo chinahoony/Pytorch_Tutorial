@@ -118,3 +118,20 @@ def semilogy(x_vals, y_vals, x_label, y_label, x2_vals=None, y2_vals=None, legen
     if x2_vals and y2_vals:
         plt.semilogy(x2_vals, y2_vals, linestyle=':')
         plt.legend(legend)
+        
+def linreg(X, w, b):
+    return torch.mm(X, w) + b
+
+def squared_loss(y_hat, y):
+    return (y_hat - y.view(y_hat.size()))**2/2
+
+
+
+
+
+
+
+
+
+
+
